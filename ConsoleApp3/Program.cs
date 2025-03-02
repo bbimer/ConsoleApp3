@@ -1,18 +1,29 @@
-﻿using GClass;
+﻿using System.Runtime.InteropServices;
+using System.Text;
+using GClass;
 internal class Program
 {
     static void Main(string[] args)
     {
+        Console.OutputEncoding = Encoding.UTF8;
+
         Triangle triangle = new Triangle(3, 4, 5);
-        Console.WriteLine($"Name: {triangle.Name}; P = {triangle.GetPerimeter()}; S = {triangle.GetArea()}");
+        triangle.print();
 
         Cube cube = new Cube(7);
-        Console.WriteLine($"\nName: {cube.Name}; P = {cube.GetPerimeter()}; S = {cube.GetArea()}");
+        cube.print();
 
         Rhombus rhombus = new Rhombus(6, 7);
-        Console.WriteLine($"\nName: {rhombus.Name}; P = {rhombus.GetPerimeter()}; S = {rhombus.GetArea()}");
+        rhombus.print();
 
         Rectangular rectangular = new Rectangular(6, 7);
-        Console.WriteLine($"\nName: {rectangular.Name}; P = {rectangular.GetPerimeter()}; S = {rectangular.GetArea()}");
+        rectangular.print();
+
+        CFigure comp = new CFigure(3);
+
+        comp.AddFigure(new Triangle(3, 4, 5));
+        comp.AddFigure(new Cube(7));
+        comp.AddFigure(new Trapezoid(7, 8, 9));
+        comp.print();
     }
 }

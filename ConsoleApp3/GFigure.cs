@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,14 +12,14 @@ namespace GClass
 {
     abstract class GFigure
     {
-        public string Name { get; set; }
+        //public string Name { get; set; }
 
         public abstract double GetArea();
         public abstract double GetPerimeter();
 
-        public void print()
+        public virtual void print()
         {
-            Console.WriteLine($"Figure: {Name}");
+            Console.WriteLine($"Figure: {GetType().Name}");  
             Console.WriteLine($"Area: {GetArea()}");
             Console.WriteLine($"Perimeter: {GetPerimeter()}\n");
         }
@@ -35,7 +37,6 @@ namespace GClass
         {
             if (a + b <= c || a + c <= b || b + c <= a) Console.WriteLine("немає такого трикутника");
 
-            Name = "Трикутник";
             this.sideA = a;
             this.sideB = b;
             this.sideC = c;  
@@ -59,7 +60,6 @@ namespace GClass
 
         public Cube(double sideA)
         {
-            Name = "Квадрат";
             this.sideA = sideA;
         }
 
@@ -81,7 +81,6 @@ namespace GClass
 
         public Rhombus(double d1, double d2)
         {
-            Name = "Ромб";
             this.d1 = d1;
             this.d2 = d2;
         }
@@ -104,7 +103,6 @@ namespace GClass
 
         public Rectangular(double width, double height)
         {
-            Name = "Прямоугольник";
             this.width = width;
             this.height = height;
         }
@@ -129,7 +127,6 @@ namespace GClass
 
         public Parallelogram(double width, double height, int sin)
         {
-            Name = "Паралелограм";
             this.width = width;
             this.height = height;
             this.sin = sin;
@@ -154,7 +151,6 @@ namespace GClass
 
         public Trapezoid(double sideA, double sideB, double height)
         {
-            Name = "Трапеція";
             this.sideA = sideA;
             this.sideB = sideB;
             this.height = height;
@@ -178,7 +174,6 @@ namespace GClass
 
         public Circle(double radius)
         {
-            Name = "Коло";
             this.radius = radius;
         }
 
@@ -200,7 +195,6 @@ namespace GClass
 
         public Ellipse(double d1, double d2)
         {
-            Name = "Еліпс";
             this.d1 = d1;
             this.d2 = d2;
         }
@@ -213,6 +207,71 @@ namespace GClass
         public override double GetPerimeter()
         {
             return (Math.PI * (3 * (d1 + d2) - Math.Sqrt((3 * d1 + d2) * (d1 + 3 * d2))));
+        }
+    }
+
+    class CFigure : GFigure
+    {
+        private GFigure[] figures;
+        private int count;
+
+        public CFigure(int size)
+        {
+            figures = new GFigure[size];
+            count = 0;
+            //Name = "Складова фігура";
+        }
+
+        public void AddFigure(GFigure figure)
+        {
+            if (count < figures.Length)
+            {
+                figures[count++] = figure;
+            }
+            else
+            {
+                Console.WriteLine("Масив фігур перевантажен!");
+            }
+        }
+
+        public override double GetArea()
+        {
+            double totalArea = 0;
+            for (int i = 0; i < count; i++)
+            {
+                totalArea += figures[i].GetArea();
+            }
+            return totalArea;
+        }
+
+        public override double GetPerimeter()
+        {
+            double totalPerimeter = 0;
+            for (int i = 0; i < count; i++)
+            {
+                totalPerimeter += figures[i].GetPerimeter();
+            }
+            return totalPerimeter;
+        }
+
+        public override void print()
+        {
+            Console.WriteLine("===========================");
+            Console.WriteLine($"Складова фігура: {GetType().Name}");
+            Console.WriteLine($"Загальна площа: {GetArea()}");
+            Console.WriteLine($"Загальний периметр: {GetPerimeter()}\n");
+            Console.WriteLine("===========================");
+
+            if (count > 0)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Console.WriteLine($"Фігура {i + 1}: {figures[i].GetType().Name}");
+                    Console.WriteLine($"\t- (S): {figures[i].GetArea()}");
+                    Console.WriteLine($"\t- (P): {figures[i].GetPerimeter()}");
+                    Console.WriteLine("-----------------------");
+                }
+            }
         }
     }
 }
